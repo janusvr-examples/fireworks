@@ -1,0 +1,787 @@
+<html>
+<head>
+<title>WebVR Fireworks 1.0</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, maximum-scale=1.0, width=device-width" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@bai0" />
+    <meta name="twitter:title" content="WebVR Fireworks 1.0" />
+    <meta name="twitter:description" content="Experience a fireworks show from the pyrotechnician's perspective" />
+    <meta name="twitter:image" content="http://i.imgur.com/ff3Wn06.png" />
+    <meta name="twitter:image:alt" content="WebVR Fireworks" />
+   
+    <meta property="og:app_id"             content="1197654320349894" />
+    <meta property="og:url"                content="http://demos.janusvr.com/bai/fireworks/" />
+    <meta property="og:type"               content="website" />
+    <meta property="og:title"              content="WebVR Fireworks 1.0" />
+    <meta property="og:description"        content="Experience a fireworks show from the pyrotechnician's perspective" />
+    <meta property="og:image"              content="http://i.imgur.com/ff3Wn06.png" />
+
+</head>
+<body>
+<FireBoxRoom>
+  <Assets>
+    <AssetSound id="pushbutton-click-in" src="sounds/button-click-in.wav" />
+    <AssetSound id="pushbutton-click-on" src="sounds/button-click-on.wav" />
+    <AssetSound id="pushbutton-click-off" src="sounds/button-click-off.wav" />
+
+    <AssetSound id="fireworks-firing" src="sounds/fireworks/fireworks-firing.wav" />
+    <AssetSound id="fireworks-exploding-01" src="sounds/fireworks/fireworks-exploding-hq-01.ogg" />
+    <AssetSound id="fireworks-exploding-02" src="sounds/fireworks/fireworks-exploding-hq-02.ogg" />
+    <AssetSound id="fireworks-exploding-03" src="sounds/fireworks/fireworks-exploding-hq-03.ogg" />
+    <AssetSound id="fireworks-exploding-04" src="sounds/fireworks/fireworks-exploding-hq-04.ogg" />
+    <AssetSound id="fireworks-whistling-01" src="sounds/fireworks/fireworks-whistling-01.ogg" />
+    <AssetSound id="fireworks-whistling-02" src="sounds/fireworks/fireworks-whistling-02.ogg" />
+    <AssetSound id="fireworks-whistling-03" src="sounds/fireworks/fireworks-whistling-03.ogg" />
+
+    <AssetImage id="sky_left" src="skybox/nx.jpg" />
+    <AssetImage id="sky_right" src="skybox/px.jpg" />
+    <AssetImage id="sky_front" src=skybox/pz.jpg" />
+    <AssetImage id="sky_back" src="skybox/nz.jpg" />
+    <AssetImage id="sky_up" src="skybox/py.jpg" />
+    <AssetImage id="sky_down" src="skybox/ny.jpg" />
+    <!--AssetImage id="spark" src="https://threejs.org/examples/textures/sprites/spark1.png" /-->
+    <AssetImage id="spark" src="particle2.png" />
+
+    <AssetObject id="land" src="model/flatlight2.dae" />
+    <AssetObject id="land2" src="model/flatnolight.dae" />
+
+  </Assets>
+  <Room use_local_asset="room_plane" visible="false" pos="30 0 0" xdir="0 0 -1" zdir="1 0 0" skybox_left_id="black" skybox_right_id="black" skybox_up_id="black" skybox_down_id="black" skybox_front_id="black" skybox_back_id="black" bloom="1.2" far_dist="2500">
+
+    <Object id="land2" collision_id="land2" />
+
+    <TeleportHelper />
+
+    <Object pos="250 0 0">
+      <Object id="cube" scale="1.5 1 3" col=".6 .4 0" pos="0 0.5 0" />
+      <FireworkLauncher js_id="launcher-whistler" pos="0 1 -1" whistle="true" minsize="3" maxsize="6" />
+      <FireworkLauncher js_id="launcher-streaker" pos="0 1 0" streak="true" minsize="6" maxsize="16" />
+      <FireworkLauncher js_id="launcher-boomer" pos="0 1 1" minsize="8" maxsize="18" />
+    </Object>
+
+    <Object pos="33 0 0" xdir="0 0 1" ydir="0 1 0" zdir="-1 0 0">
+      <Text pos="0 0 -15" scale="30 30 30">WebVR Fireworks</Text>
+
+      <PushButton pos="-1 0 0" col="1 0 0" onactivate="room.objects['launcher-whistler'].fire(1, 35, 1800)" accesskey="1" />
+      <Text pos="-1 .5 -.25" xdir="0 0 1" zdir="-1 0 0">Whistler</Text>
+      <Text pos="-1 .4 -.25" scale=".5 .5 .5" xdir="0 0 1" zdir="-1 0 0">(Press 1)</Text>
+
+      <PushButton pos="0 0 0" col="1 1 1" onactivate="room.objects['launcher-streaker'].fire(2, room.objects['slider_velocity'].value, room.objects['slider_fusetime'].value)" accesskey="2" />
+      <Text pos="0 .5 -.25" xdir="0 0 1" zdir="-1 0 0">Streaker</Text>
+      <Text pos="0 .4 -.25" scale=".5 .5 .5" xdir="0 0 1" zdir="-1 0 0">(Press 2)</Text>
+
+      <PushButton pos="1 0 0" col="0 0 1" onactivate="room.objects['launcher-boomer'].fire(4, room.objects['slider_velocity'].value, room.objects['slider_fusetime'].value)" accesskey="3" />
+      <Text pos="1 .5 -.25" xdir="0 0 1" zdir="-1 0 0">Boomer</Text>
+      <Text pos="1 .4 -.25" scale=".5 .5 .5" xdir="0 0 1" zdir="-1 0 0">(Press 3)</Text>
+
+      <Slider pos="-.5 0 1" col=".25 .25 .25" js_id="slider_fusetime" min="1" value="4500" max="12000" />
+      <Text pos="-.5 .25 .9">Fuse Time</Text>
+
+      <Slider pos=".5 0 1" col=".25 .25 .25" js_id="slider_velocity" value="55" max="100" />
+      <Text pos=".5 .25 .9">Launch Speed</Text>
+    </Object>
+
+    <ObjectPool objecttype="firework" max="75" js_id="fireworks" />
+    <ObjectPool objecttype="explosion" max="30" js_id="explosions" />
+    <!-- ObjectPool objecttype="sparktrail" max="10" js_id="trails" / -->
+
+    <!-- FIXME - preloading sounds -->
+    <Sound pos="0 -99999 0" gain="0" id="fireworks-exploding-01" />
+    <Sound pos="0 -99999 0" gain="0" id="fireworks-exploding-02" />
+    <Sound pos="0 -99999 0" gain="0" id="fireworks-exploding-03" />
+    <Sound pos="0 -99999 0" gain="0" id="fireworks-exploding-04" />
+
+    <Link js_id="teleport01" pos="30 0 -5.5" thumb_id="lobby_thumb" url="https://web.janusvr.com" scale="1.5 2 1" />
+    <Teleporter js_id="teleport01" pos="30 0 -5" col="0 .4 0" url="https://web.janusvr.com" length="1.5" />
+  </Room>
+</FireBoxRoom>
+
+<script src="janusweb.js"></script>
+<script>
+elation.janusweb.init({url: document.location.href}).then(function(janus) {
+  janus.registerElement('pushbutton', {
+    width:        .5,
+    length:       .5,
+    height:       .5,
+    clicking:     false,
+    state:        'off',
+    accesskey:    false,
+
+    onactivate:   false,
+    ondeactivate: false,
+
+    createChildren: function() {
+      this.base = room.createObject('Object', {
+        id: 'cube',
+        collision_id: 'cube',
+        col: V(.6,.6,.6),
+        scale: V(this.length,this.height / 2,this.width),
+        pos: V(0,this.height/4,0)
+      }, this);
+      this.button = room.createObject('Object', {
+        id: 'cube',
+        collision_id: 'cube',
+        col: this.col,
+        scale: V(this.length * .8, this.height / 4, this.width * .8),
+      }, this);
+      this.sounds = {
+        clickin:  room.createObject('Sound', { id: 'pushbutton-click-in', }, this),
+        clickon:  room.createObject('Sound', { id: 'pushbutton-click-on', }, this),
+        clickoff: room.createObject('Sound', { id: 'pushbutton-click-off', }, this),
+      };
+
+      this.button.addEventListener('mousedown', this.onMouseDown);
+      window.addEventListener('mouseup', this.onMouseUp);
+      window.addEventListener('touchend', this.onMouseUp);
+      this.button.addEventListener('click', this.onClick);
+
+      if (this.accesskey) {
+        room.onKeyDown = this.onKeyDown;
+        room.onKeyUp = this.onKeyUp;
+      }
+
+      this.setButtonPos();
+    },
+    activate: function() {
+      this.executeCallback(this.onactivate);
+    },
+    onClick: function(ev) {
+      if (this.onclick) {
+        this.executeCallback(this.onclick);
+      }
+    },
+    onMouseDown: function(ev) {
+      this.button.sync = true;
+      this.clicking = true;
+      this.activate();
+
+      this.setState('in');
+
+      if (ev) {
+        ev.stopPropagation();
+      }
+    },
+    onMouseUp: function(ev) {
+      if (this.clicking) {
+        this.setState('off');
+        this.button.sync = true;
+        this.clicking = false;
+
+        if (ev) {
+          ev.stopPropagation();
+        }
+      }
+    },
+    onKeyDown: function(ev) {
+      if (ev.keyCode == this.accesskey) {
+        this.onMouseDown(ev);
+      }
+    },
+    onKeyUp: function(ev) {
+      if (ev.keyCode == this.accesskey) {
+        this.onMouseUp(ev);
+      }
+    },
+    setActive: function(active) {
+      this.setState(active ? 'on' : 'off');
+    },
+    setButtonPos: function(pos)   {
+      if (typeof pos == 'undefined') pos = (this.active ? .6 : 0);
+      var percent = Math.min(1, Math.max(0, pos));
+      var defaultpos = this.height / 2;
+      this.button.pos = V(0, defaultpos - ((this.height / 8) * percent) + (this.height / 16), 0);
+    },
+    setState: function(state) {
+      if (state != this.state) {
+        this.state = state;
+        if (state == 'in') {
+          this.setButtonPos(1);
+          this.sounds.clickin.play();
+        } else if (state == 'on') {
+          this.setButtonPos(.6);
+          this.sounds.clickon.play();
+        } else if (state == 'off') {
+          this.setButtonPos(0);
+          this.sounds.clickoff.play();
+        }
+      }
+    }
+      
+  });
+  janus.registerElement('fireworklauncher', {
+    muzzlespeed: 72,
+    random: .5,
+    fusetime: 5000,
+    whistle: false,
+    streak: false,
+    minsize: 1,
+    maxsize: 16,
+
+    createChildren: function() {
+      this.createObject('Object', {
+        id: 'pipe',
+        scale: V(.2,.4,.2),
+        col: V(.4)
+      });
+      this.sound = this.createObject('Sound', {
+        id: 'fireworks-firing'
+      });
+    },
+    fire: function(num, speed, fusetime) {
+      if (!num) num = 1;
+      this.sound.stop();
+      this.sound.seek(0);
+      this.sound.play();
+
+      if (!speed) speed = this.muzzlespeed;
+      if (!fusetime) fusetime = this.fusetime;
+
+      for (var i = 0; i < num; i++) {
+        var worldpos = this.localToWorld(V(0,0,0));
+        var firedir = this.localToWorld(normalized(V(Math.random() * this.random - this.random/2, 1, Math.random() * this.random - this.random/2)));
+        var size = Math.ceil(Math.random() * 16);
+        var vel = scalarMultiply(V(firedir.x - worldpos.x, firedir.y - worldpos.y, firedir.z - worldpos.z), speed);
+        var col = new THREE.Color().setHSL(Math.random(), 1, .5);
+        var firework = room.objects['fireworks'].grab({
+          pos: worldpos,
+          mass: 1,
+          size: this.minsize + Math.floor(Math.random() * (this.maxsize - this.minsize)),
+          vel: vel,
+          col: col,
+          fusetime: fusetime,
+          whistle: this.whistle,
+          streak: this.streak
+        });
+        if (firework) {
+          setTimeout(firework.enable, 10);
+        }
+      }
+    }
+  });
+  janus.registerElement('firework', {
+    fusetime: 12000,
+    fadetime: 2000,
+    size: 2,
+    whistle: false,
+    streak: false,
+
+    createChildren: function() {
+      this.trail = room.createObject('particle', {
+        col: V(.75,.75,.75),
+        accel: V(0,-9.8,0),
+        rate: 1,
+        count: 30,
+        duration: .5,
+        rand_col: V(1,1,0),
+        scale: V(1.5),
+        image_id: 'spark',
+        loop: true
+      });
+      this.gravity = this.addForce('gravity', V(0,0,0));
+      this.addEventListener('update', this.update);
+    },
+    enable: function() {
+      if (this.explodetimer) {
+        clearTimeout(this.explodetimer);
+      }
+      this.explodetimer = setTimeout(this.explode, this.fusetime + (Math.random() * this.fusetime) / 20);
+      this.gravity.update(V(0,-9.8,0));
+      if (this.streak) {
+        var randscale = 6;
+        this.trail.particle_vel = V(Math.random() * -randscale, 0, Math.random() * -randscale);
+        this.trail.rand_vel = V(randscale, 0, randscale);
+        this.trail.play();
+        this.trail.visible = true;
+      } else {
+        this.trail.visible = false;
+      }
+      if (this.whistle) {
+        var soundid = 'fireworks-whistling-0' + Math.ceil(Math.random() * 3);
+
+        if (!this.sound) {
+          this.sound = this.createObject('Sound', {
+            id: soundid,
+            gain: this.size * 10
+          });
+        } else {
+          this.sound.stop();
+          this.sound.gain = this.size * 10;
+          this.sound.seek(0);
+        }
+        this.sound.play();
+      }
+    },
+    disable: function() {
+      if (this.explodetimer) {
+        clearTimeout(this.explodetimer);
+      }
+      this.gravity.update(V(0,0,0));
+      if (this.whistle) {
+        this.sound.stop();
+      }
+      //this.removeEventListener('update', this.fade);
+      this.pos = V(0,-99999,0);
+    },
+    update: function(ev) {
+      var worldpos = this.localToWorld(V(0));
+      if (this.streak) {
+        this.trail.emitter_pos = worldpos;
+        this.fade(ev);
+      }
+    },
+    explode: function() {
+      var worldpos = this.localToWorld(V(0,0,0));
+      var explosion = room.objects['explosions'].grab({
+        pos: worldpos,
+        fadetime: this.fadetime,
+        size: this.size,
+        col: this.col,
+        particle_vel: this.vel
+      });
+      this.explodetimer = false;
+      setTimeout(explosion.explode, 10);
+      this.disable();
+      room.objects['fireworks'].release(this);
+    },
+    fade: function(ev) {
+      var dt = ev.data;
+      if (!this.explodetimer) {
+        if (this.trail && this.trail.opacity > 0) {
+          var amount = dt;
+          this.trail.opacity -= amount;
+        }
+      } else {
+        this.trail.opacity = (this.streak ? 1 : 0);
+      }
+    }
+  }, 'janusobject');
+  janus.registerElement('explosion', {
+    size: 2,
+    fadetime: 3000,
+    particle_vel: V(0),
+
+    enable: function() {
+    },
+    disable: function() {
+      if (this.soundtimer) {
+        clearTimeout(this.soundtimer);
+      }
+      this.removeEventListener('update', this.fade);
+      this.pos = V(0,-99999,0);
+    },
+    explode: function() {
+      var worldpos = this.localToWorld(V(0,0,0));
+      this.throwsparks(worldpos);
+
+      // Delay sound to simulate speed of sound
+      var distance = this.distanceTo(player);
+      this.soundtimer = setTimeout(this.playsound, (distance / 340.29) * 1000);
+      //this.sparks.particle_vel = translate(this.particle_vel, V(-1 * this.size));
+      this.addEventListener('update', this.fade);
+    },
+    throwsparks: function(worldpos) {
+      var velscale = .5;
+      var particle_vel = translate(this.particle_vel, V(-(velscale / 2) * this.size));
+      var rand_vel = V(velscale * this.size);
+      if (!this.sparks) {
+        this.sparks = room.createObject('Particle', {
+          pos: worldpos,
+          col: this.col,
+          particle_vel: particle_vel,
+          rand_vel: rand_vel,
+          accel: V(0,-9.8,0),
+          scale: V(2),
+          rate: 5000,
+          count: this.size * 2,
+          image_id: 'spark',
+          duration: this.fadetime / 1000,
+        });
+        this.sparks.particle_vel = particle_vel;
+        this.sparks.rand_vel = rand_vel;
+      } else {
+        this.sparks.pos = worldpos;
+        this.sparks.col = this.col;
+        this.sparks.particle_vel = particle_vel;
+        this.sparks.rand_vel = rand_vel;
+        this.sparks.count = this.size * 2;
+        this.sparks.play();
+      }
+      this.sparks.opacity = 1;
+    },
+    playsound: function() {
+      var worldpos = this.localToWorld(V(0,0,0));
+      var soundid = 'fireworks-exploding-0' + Math.ceil(Math.random() * 4);
+      if (!this.sound) {
+        this.sound = room.createObject('Sound', {
+          id: soundid,
+          pos: worldpos,
+          gain: this.size
+        });
+      } else {
+        this.sound.stop();
+        this.sound.pos = worldpos;
+        this.sound.gain = this.size;
+        this.sound.seek(0);
+      }
+      this.sound.play();
+    },
+    fade: function(ev) {
+      var dt = ev.data;
+      if (this.sparks && this.sparks.opacity > 0) {
+        var amount = (1000 / this.fadetime ) * dt;
+        this.sparks.opacity -= amount;
+      } else {
+        this.disable();
+        room.objects['explosions'].release(this);
+      }
+    }
+  }, 'janusobject');
+  janus.registerElement('teleporthelper', {
+    active: false,
+    longpresstime: 250,
+    deadzone: 5,
+
+    createChildren: function() {
+      this.marker = room.createObject('Object', {
+        id: 'pipe',
+        col: '#009',
+        scale: V(.5,.05,.5)
+      }, this);
+      this.light = room.createObject('Light', {
+        col: '#009',
+        pos: V(0,1,0)
+      }, this);
+      this.particles = room.createObject('Particle', {
+        col: V(0,.2,1,.2),
+        pos: V(-.25,.1,-.25),
+        scale: V(.05),
+        //vel: V(-.5,0,-.5),
+        particle_vel: V(-.4,0,-.4),
+        rand_vel: V(.8,2,.8),
+        rand_col: V(.5,.5,1),
+        rand_pos: V(.5,0,.5),
+        accel: V(0,-1,0),
+        rand_accel: V(0,2,0),
+        rate: 50,
+        count: 50,
+        duration: 1,
+        collision_id: '',
+        pickable: false,
+        loop: true
+      }, this);
+      this.particles.particle_vel = V(-.4, 0, -.4); // FIXME - particle velocity isn't being set on spawn
+      this.sound = room.createObject('Sound', { id: 'teleport2' }, this);
+
+      this.addEventListener('update', this.handleFrame);
+
+      room.onMouseDown = this.handleMouseDown;
+      room.onMouseUp = this.handleMouseUp;
+      this.disableCursor();
+      window.addEventListener('mousemove', this.handleMouseMove);
+      window.addEventListener('touchmove', this.handleTouchMove);
+    },
+    handleMouseDown: function(ev) {
+      this.longpresstimer = setTimeout(this.enableCursor, this.longpresstime);
+      this.mousediff = [0,0];
+    },
+    handleMouseMove: function(ev) {
+      if (this.longpresstimer) {
+        this.mousediff[0] += ev.movementX;
+        this.mousediff[1] += ev.movementY
+        var distance = Math.sqrt(this.mousediff[0] * this.mousediff[0] + this.mousediff[1] * this.mousediff[1]);
+        if (distance > this.deadzone) {
+          clearTimeout(this.longpresstimer);
+        }
+      }
+    },
+    handleTouchMove: function(ev) {
+      if (this.longpresstimer) {
+        var touch = ev.changedTouches[0];
+
+        if (this.lasttouch) {
+          this.mousediff[0] += touch.clientX - this.lasttouch[0];
+          this.mousediff[1] += touch.clientY - this.lasttouch[1];
+        } else {
+          this.mousediff[0] = 0;
+          this.mousediff[1] = 0;
+        }
+        this.lasttouch = [touch.clientX, touch.clientY];
+        var distance = Math.sqrt(this.mousediff[0] * this.mousediff[0] + this.mousediff[1] * this.mousediff[1]);
+        if (distance > this.deadzone) {
+          clearTimeout(this.longpresstimer);
+        }
+      }
+    },
+    handleMouseUp: function() {
+      if (this.longpresstimer) {
+        clearTimeout(this.longpresstimer);
+      }
+      if (this.active) {
+        player.pos = player.cursor_pos;
+        this.sound.pos = player.pos;
+        this.sound.play();
+      }
+      this.disableCursor();
+    },
+    enableCursor: function() {
+      this.pos = player.cursor_pos;
+      this.visible = true;
+      this.active = true;
+    },
+    disableCursor: function() {
+      this.visible = false;
+      this.active = false;
+    },
+    handleFrame: function() {
+      if (this.active) {
+        this.pos = player.cursor_pos;
+      }
+    }
+  });
+  janus.registerElement('objectpool', {
+    objectpool: [],
+    free: [],
+    pending: [],
+    max: 100,
+    objecttype: 'object',
+    objectargs: {},
+
+    createChildren: function() {
+      // FIXME - I thought I fixed the problem with object properties acting like static member properties
+      this.objectpool = [];
+      this.free = [];
+      this.pending = [];
+      this.objectargs = {};
+    },
+
+    grab: function(args) {
+      var obj = false;
+      if (this.free.length > 0) {
+        obj = this.free.shift();
+      } else if (this.objectpool.length < this.max) {
+        obj = this.allocate();
+      } else if (this.pending.length > 0) {
+        obj = this.pending.shift();
+      }
+
+      if (obj && args) {
+        for (var k in args) {
+          obj[k] = args[k];
+        }
+      }
+
+      if (obj) {
+        this.pending.push(obj);
+      }
+      return obj;
+    },
+    release: function(obj) {
+      this.free.push(obj);
+      var idx = this.pending.indexOf(obj);
+      if (idx != -1) {
+        this.pending.splice(idx, 1);
+      }
+    },
+    allocate: function() {
+      // FIXME - if we don't allocate a color here, it messes up obj.defaultcolor
+      var obj = room.createObject(this.objecttype, {
+        col: V(1)
+      });
+      this.objectpool.push(obj);
+      return obj;
+    }
+  });
+  janus.registerElement('slider', {
+    clicking: false,
+    value: 1,
+    min: 0,
+    max: 1,
+    length: 1,
+    width: .25,
+    height: .2,
+
+    onbegin:  false,
+    onchange: false,
+    onend:    false,
+
+    createChildren: function() {
+      this.base = room.createObject('Object', {
+        id: 'cube',
+        collision_id: 'cube',
+        col: V(.6,.6,.6),
+        scale: V(this.length,this.height/2,this.width),
+        pos: V(0,this.height/4,0)
+      }, this);
+      this.track = room.createObject('Object', {
+        id: 'cube',
+        collision_id: 'cube',
+        col: V(.02,.02,.02),
+        scale: V(this.length * .9, this.height / 4, this.width / 5),
+        pos: V(0, this.base.pos.y + this.height / 4,0)
+      }, this);
+      this.handle = room.createObject('Object', {
+        id: 'cube',
+        collision_id: 'cube',
+        col: this.col,
+        scale: V(this.width / 4, this.height / 4, this.width * .75),
+        pos: V(0,this.base.pos.y,0)
+      }, this);
+      this.sounds = {
+        clickin:  room.createObject('Sound', { id: 'pushbutton-click-in', }, this),
+        clickon:  room.createObject('Sound', { id: 'pushbutton-click-on', }, this),
+        clickoff: room.createObject('Sound', { id: 'pushbutton-click-off', }, this),
+      };
+
+      this.handle.addEventListener('mousedown', this.onMouseDown);
+      this.track.addEventListener('mousedown', this.onMouseDown);
+      // FIXME - bind these in mousedown, for maximum efficiency
+      window.addEventListener('mouseup', this.onMouseUp);
+      window.addEventListener('touchend', this.onMouseUp);
+      window.addEventListener('mousemove', this.onMouseMove);
+      window.addEventListener('touchmove', this.onMouseMove);
+      this.handle.addEventListener('click', this.onClick);
+
+      this.setValue(this.value);
+    },
+    setValue: function(value, skipchange) {
+      var realvalue = Math.min(this.max, Math.max(this.min, value));
+      var percent = realvalue / (this.max - this.min);
+      var pos = (percent - .5) * this.length * .9;
+      this.handle.pos = V(pos, this.base.pos.y + this.height * 3 / 8 , 0);
+      this.handle.sync = true;
+      this.value = realvalue;
+
+      if (this.onchange && !skipchange) {
+        this.executeCallback(this.onchange);
+      }
+    },
+    updateValueFromCursorPos: function() {
+      // FIXME - vector proxies are currently broken
+      var sliderpos = this.parent.localToWorld(this.pos._target.clone());
+      var dist = player.head_pos.distanceTo(sliderpos);
+
+      // Cast a ray from my head to the cursor position
+      var dir = V(player.cursor_pos.x - player.head_pos.x, player.cursor_pos.y - player.head_pos.y, player.cursor_pos.z - player.head_pos.z);
+
+      // Then project the ray into the same plane as the slider I'm manipulating
+      var pos = translate(player.head_pos, scalarMultiply(normalized(dir), dist));
+      this.worldToLocal(pos);
+
+      // The slider position is now determined based on the x position (left/right) in the slider's own coordinate system, and the length of the slider
+      var foo = pos.x / (this.length * .9) + .5;
+
+      this.setValue(foo * (this.max - this.min));
+    },
+    onMouseDown: function(ev) {
+      this.clicking = true;
+      this.updateValueFromCursorPos(); 
+      this.sounds.clickin.play();
+      if (this.onbegin) this.executeCallback(this.onbegin);
+      ev.preventDefault();
+      ev.stopPropagation();
+    },
+    onMouseMove: function(ev) {
+      if (this.clicking) {
+        this.updateValueFromCursorPos(); 
+        ev.stopPropagation();
+      }
+    },
+    onMouseUp: function(ev) {
+      if (this.clicking) {
+        this.clicking = false;
+        this.sounds.clickoff.play();
+        if (this.onend) this.executeCallback(this.onend);
+        ev.stopPropagation();
+      }
+    },
+    onClick: function(ev) {
+    }
+    
+  });
+  janus.registerElement('teleporter', {
+    target: false,
+    url: false,
+    width: 1,
+    length: 1,
+    height: 2,
+    flicker: 8,
+    fudgefactor: 1.2,
+    cooldown: 1000,
+    cooling: false,
+
+    createChildren: function() {
+      this.light = room.createObject('Light', {
+        col: this.col,
+        pos: V(0,1,0)
+      }, this);
+      this.particles = room.createObject('Particle', {
+        col: this.col,
+        pos: V(-.5,.1,-.5),
+        scale: V(.05),
+        //vel: V(-.5,0,-.5),
+        particle_vel: V(-.4,0,-.4),
+        rand_vel: V(.8,2,.8),
+        rand_col: V(1,.5,.5),
+        rand_pos: V(1,0,1),
+        accel: V(0,-1,0),
+        rand_accel: V(0,2,0),
+        rate: 50,
+        count: 50,
+        duration: 1,
+        loop: true
+      }, this);
+      this.particles.particle_vel = V(-.4, 0, -.4); // FIXME - particle velocity isn't being set on spawn
+      this.base = room.createObject('Object', {
+        id: 'cube',
+        col: this.col,
+        scale: V(this.length,.2,this.width),
+        collision_id: 'cube',
+        collision_scale: V(1,.5,1),
+        collision_trigger: true,
+        oncollision: this.handleCollision
+      }, this);
+
+      this.sound = room.createObject('Sound', { id: 'teleport' }, this);
+
+      this.addEventListener('update', this.handleFrame);
+    },
+    activate: function() {
+      if (!this.cooling) {
+        this.cooling = true;
+        if (this.target && room.objects[this.target]) {
+          player.pos = room.objects[this.target].pos;
+          this.sound.play();
+        } else if (this.url) {
+console.log('DO IT');
+          // FIXME - 'janus' should be the same as window.janus, but here it refers to the client object
+          var url = this.url;
+          this.sound.play();
+          janus.janusweb.setActiveRoom(url);
+        }
+        setTimeout(this.cooldownFinish, this.cooldown);
+      }
+    },
+    cooldownFinish: function() {
+      this.cooling = false;
+    },
+    handleCollision: function(ev) {
+      // FIXME - player collisions are currently disabled
+      console.log('boing!', this.target);
+    },
+    handleFrame: function() {
+      // FIXME - vextor proxies are all kinds of broken
+      var pos = this.worldToLocal(player.head_pos.clone());
+      if ((pos.y >= 0 && pos.y <= this.height) && (Math.abs(pos.x) < this.length / 2 * this.fudgefactor && Math.abs(pos.z) < this.width / 2 * this.fudgefactor)) {
+        this.activate();
+      }
+      this.light.light_intensity = Math.max(20, Math.min(80, this.light.light_intensity + (Math.random() * this.flicker - (this.flicker / 2))));
+    }
+  });
+});
+</script>
+</body>
+</html>
+
